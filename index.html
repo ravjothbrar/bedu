@@ -19,13 +19,28 @@
       --muted:     #5a5a6e;
       --navy:      #1a1a2e;
       --border:    rgba(240,237,232,0.08);
+      --nav-blur:  rgba(10,10,15,0.82);
+      --drawer-bg: rgba(10,10,15,0.97);
       --font-body: 'Inter', sans-serif;
       --font-disp: 'Playfair Display', serif;
+    }
+
+    [data-theme="light"] {
+      --bg:        #faf9f7;
+      --gold:      #a87c2a;
+      --gold-dim:  rgba(168,124,42,0.14);
+      --text:      #0f0f14;
+      --muted:     #6b6b7a;
+      --navy:      #f0ede8;
+      --border:    rgba(15,15,20,0.1);
+      --nav-blur:  rgba(250,249,247,0.88);
+      --drawer-bg: rgba(250,249,247,0.98);
     }
 
     html { scroll-behavior: smooth; font-size: 16px; }
 
     body {
+      transition: background .35s ease, color .35s ease;
       background: var(--bg);
       color: var(--text);
       font-family: var(--font-body);
@@ -57,7 +72,7 @@
       transition: background .4s ease, backdrop-filter .4s ease, border-bottom .4s ease;
     }
     nav.scrolled {
-      background: rgba(10,10,15,0.82);
+      background: var(--nav-blur);
       backdrop-filter: blur(18px);
       -webkit-backdrop-filter: blur(18px);
       border-bottom: 1px solid var(--border);
@@ -107,7 +122,7 @@
     /* mobile drawer */
     .mobile-drawer {
       display: none; position: fixed; inset: 0; z-index: 99;
-      background: rgba(10,10,15,0.97);
+      background: var(--drawer-bg);
       flex-direction: column; align-items: center; justify-content: center;
       gap: 2.8rem;
     }
@@ -343,6 +358,25 @@
     .footer-name { font-size: .8rem; letter-spacing: .14em; color: var(--muted); text-transform: uppercase; }
     .footer-copy { font-size: .78rem; color: var(--muted); }
 
+    /* ── Theme toggle ── */
+    #theme-toggle {
+      background: none; border: 1px solid var(--border);
+      color: var(--muted); cursor: none;
+      width: 36px; height: 36px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      transition: border-color .25s, color .25s;
+      flex-shrink: 0;
+    }
+    #theme-toggle:hover { border-color: var(--gold); color: var(--gold); }
+    #theme-toggle svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.6; }
+    .icon-sun, .icon-moon { transition: opacity .25s; }
+    [data-theme="light"] .icon-moon { display: none; }
+    [data-theme="dark"]  .icon-sun  { display: none; }
+    .nav-right { display: flex; align-items: center; gap: 2rem; }
+
+    /* light mode: timeline dot needs page bg colour */
+    [data-theme="light"] .timeline-date::after { background: var(--bg); }
+
     /* ── Responsive ── */
     @media (max-width: 900px) {
       nav { padding: 1.2rem 2rem; }
@@ -383,15 +417,23 @@
 <!-- Nav -->
 <nav id="nav">
   <a href="#hero" class="nav-logo">AS</a>
-  <ul class="nav-links">
-    <li><a href="#about">About</a></li>
-    <li><a href="#focus">Focus</a></li>
-    <li><a href="#career">Career</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ul>
-  <button class="hamburger" id="hamburger" aria-label="Menu">
-    <span></span><span></span><span></span>
-  </button>
+  <div class="nav-right">
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#focus">Focus</a></li>
+      <li><a href="#career">Career</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <button id="theme-toggle" aria-label="Toggle theme">
+      <!-- Sun (light mode icon) -->
+      <svg class="icon-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      <!-- Moon (dark mode icon) -->
+      <svg class="icon-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+    </button>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
 </nav>
 
 <!-- Mobile drawer -->
@@ -779,6 +821,17 @@
     hamburger.classList.remove('open');
     drawer.classList.remove('open');
   }
+
+  /* ── Theme toggle ── */
+  const html = document.documentElement;
+  const toggleBtn = document.getElementById('theme-toggle');
+  const saved = localStorage.getItem('theme') || 'dark';
+  html.dataset.theme = saved;
+  toggleBtn.addEventListener('click', () => {
+    const next = html.dataset.theme === 'dark' ? 'light' : 'dark';
+    html.dataset.theme = next;
+    localStorage.setItem('theme', next);
+  });
 
   /* ── Trigger hero reveals immediately ── */
   window.addEventListener('DOMContentLoaded', () => {
