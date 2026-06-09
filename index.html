@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,108 +8,150 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+
+  <!-- Favicon: "AS" initials as inline SVG -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0a0f'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='central' text-anchor='middle' font-family='Georgia,serif' font-size='13' font-weight='600' fill='%235B9FE8' letter-spacing='0.5'%3EAS%3C/text%3E%3C/svg%3E" />
+
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg:        #0a0a0f;
-      --gold:      #c9a84c;
-      --gold-dim:  rgba(201,168,76,0.18);
-      --text:      #f0ede8;
-      --muted:     #5a5a6e;
-      --navy:      #1a1a2e;
-      --border:    rgba(240,237,232,0.08);
-      --nav-blur:  rgba(10,10,15,0.82);
-      --drawer-bg: rgba(10,10,15,0.97);
-      --font-body: 'Inter', sans-serif;
-      --font-disp: 'Playfair Display', serif;
+      --bg:         #0c0c12;
+      --blue:       #5B9FE8;
+      --blue-dim:   rgba(91,159,232,0.12);
+      --text:       #eceaf5;
+      --muted:      #7070888;
+      --subtle:     #111120;
+      --border:     rgba(236,234,245,0.07);
+      --nav-blur:   rgba(12,12,18,0.85);
+      --drawer-bg:  rgba(12,12,18,0.98);
+      --font-body:  'Inter', sans-serif;
+      --font-disp:  'Playfair Display', serif;
     }
 
     [data-theme="light"] {
-      --bg:        #faf9f7;
-      --gold:      #a87c2a;
-      --gold-dim:  rgba(168,124,42,0.14);
-      --text:      #0f0f14;
-      --muted:     #6b6b7a;
-      --navy:      #f0ede8;
-      --border:    rgba(15,15,20,0.1);
-      --nav-blur:  rgba(250,249,247,0.88);
-      --drawer-bg: rgba(250,249,247,0.98);
+      --bg:         #f7f6f4;
+      --blue:       #3a7fd4;
+      --blue-dim:   rgba(58,127,212,0.10);
+      --text:       #0e0e18;
+      --muted:      #5a5a72;
+      --subtle:     #edecea;
+      --border:     rgba(14,14,24,0.09);
+      --nav-blur:   rgba(247,246,244,0.90);
+      --drawer-bg:  rgba(247,246,244,0.99);
     }
 
-    html { scroll-behavior: smooth; font-size: 16px; }
+    html {
+      font-size: 16px;
+      /* native smooth scroll, JS momentum layered on top */
+      scroll-behavior: auto;
+    }
 
     body {
-      transition: background .35s ease, color .35s ease;
       background: var(--bg);
       color: var(--text);
       font-family: var(--font-body);
       font-weight: 400;
-      line-height: 1.65;
+      line-height: 1.7;
       overflow-x: hidden;
       cursor: none;
+      transition: background .4s ease, color .4s ease;
     }
 
     /* ── Custom cursor ── */
     #cursor {
       position: fixed;
-      width: 8px; height: 8px;
-      background: var(--gold);
+      width: 9px; height: 9px;
+      background: var(--blue);
       border-radius: 50%;
       pointer-events: none;
       transform: translate(-50%,-50%);
-      transition: transform .15s ease, width .2s ease, height .2s ease, opacity .2s ease;
+      transition: width .22s ease, height .22s ease, background .22s ease;
       z-index: 9999;
-      mix-blend-mode: normal;
+      will-change: left, top;
     }
-    #cursor.expand { width: 28px; height: 28px; background: transparent; border: 1px solid var(--gold); }
+    #cursor.expand {
+      width: 30px; height: 30px;
+      background: transparent;
+      border: 1.5px solid var(--blue);
+    }
+
+    /* ── Smooth scroll shim ── */
+    #scroll-container {
+      position: fixed;
+      inset: 0;
+      overflow-y: scroll;
+      overflow-x: hidden;
+      will-change: transform;
+    }
+    #scroll-content {
+      will-change: transform;
+    }
 
     /* ── Nav ── */
     nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 100;
       display: flex; align-items: center; justify-content: space-between;
-      padding: 1.4rem 4rem;
-      transition: background .4s ease, backdrop-filter .4s ease, border-bottom .4s ease;
+      padding: 1.5rem 4rem;
+      transition: background .4s, border-bottom .4s;
     }
     nav.scrolled {
       background: var(--nav-blur);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--border);
     }
     .nav-logo {
       font-family: var(--font-disp);
-      font-size: 1.25rem;
-      letter-spacing: .08em;
-      color: var(--gold);
+      font-size: 1.2rem;
+      letter-spacing: .06em;
+      color: var(--blue);
       text-decoration: none;
       font-weight: 600;
     }
+    .nav-right { display: flex; align-items: center; gap: 2.6rem; }
     .nav-links { display: flex; gap: 2.8rem; list-style: none; }
     .nav-links a {
       text-decoration: none;
       color: var(--muted);
-      font-size: .72rem;
-      letter-spacing: .16em;
+      font-size: .75rem;
+      letter-spacing: .14em;
       text-transform: uppercase;
       font-weight: 500;
-      transition: color .25s;
+      transition: color .2s;
       position: relative;
     }
     .nav-links a::after {
       content: '';
-      position: absolute; left: 0; bottom: -3px;
+      position: absolute; left: 0; bottom: -4px;
       width: 0; height: 1px;
-      background: var(--gold);
+      background: var(--blue);
       transition: width .3s ease;
     }
     .nav-links a:hover, .nav-links a.active { color: var(--text); }
     .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
 
+    /* theme toggle */
+    #theme-toggle {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      cursor: none;
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      transition: border-color .2s, color .2s;
+      flex-shrink: 0;
+    }
+    #theme-toggle:hover { border-color: var(--blue); color: var(--blue); }
+    #theme-toggle svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; }
+    [data-theme="light"] .icon-moon { display: none; }
+    [data-theme="dark"]  .icon-sun  { display: none; }
+
     /* hamburger */
     .hamburger {
-      display: none; flex-direction: column; gap: 5px; cursor: none;
-      background: none; border: none; padding: 4px;
+      display: none; flex-direction: column; gap: 5px;
+      cursor: none; background: none; border: none; padding: 4px;
     }
     .hamburger span {
       display: block; width: 22px; height: 1px; background: var(--text);
@@ -119,299 +161,314 @@
     .hamburger.open span:nth-child(2) { opacity: 0; }
     .hamburger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
 
-    /* mobile drawer */
     .mobile-drawer {
       display: none; position: fixed; inset: 0; z-index: 99;
       background: var(--drawer-bg);
       flex-direction: column; align-items: center; justify-content: center;
-      gap: 2.8rem;
+      gap: 2.6rem;
     }
     .mobile-drawer.open { display: flex; }
     .mobile-drawer a {
       text-decoration: none; color: var(--text);
-      font-size: 1.1rem; letter-spacing: .2em; text-transform: uppercase;
+      font-size: 1.05rem; letter-spacing: .18em; text-transform: uppercase;
       font-weight: 500;
     }
 
-    /* ── Sections common ── */
+    /* ── Section common ── */
     section { position: relative; }
-    .section-label {
-      font-size: .72rem; letter-spacing: .22em; text-transform: uppercase;
-      color: var(--gold); font-weight: 500; margin-bottom: 2.4rem;
-    }
-    .container { max-width: 1160px; margin: 0 auto; padding: 0 3rem; }
+    .container { max-width: 1120px; margin: 0 auto; padding: 0 3.2rem; }
 
-    /* ── Fade-in animation ── */
+    .section-label {
+      font-size: .7rem; letter-spacing: .26em; text-transform: uppercase;
+      color: var(--blue); font-weight: 500; margin-bottom: 2.8rem;
+      display: flex; align-items: center; gap: .9rem;
+    }
+    .section-label::after {
+      content: ''; flex: 1; height: 1px;
+      background: var(--border); max-width: 80px;
+    }
+
+    /* ── Reveal ── */
     .reveal {
-      opacity: 0; transform: translateY(28px);
-      transition: opacity .75s ease, transform .75s ease;
+      opacity: 0; transform: translateY(22px);
+      transition: opacity .7s ease, transform .7s ease;
     }
     .reveal.visible { opacity: 1; transform: translateY(0); }
 
     /* ── Hero ── */
     #hero {
-      min-height: 100vh; display: flex; align-items: center;
-      padding: 0 4rem; position: relative; overflow: hidden;
+      min-height: 100vh;
+      display: flex; align-items: center;
+      padding: 0 4rem;
+      position: relative; overflow: hidden;
     }
-    .hero-content { position: relative; z-index: 2; max-width: 660px; }
+    .hero-content { position: relative; z-index: 2; max-width: 640px; }
+
     .hero-eyebrow {
-      display: inline-block;
-      font-size: .72rem; letter-spacing: .25em; text-transform: uppercase;
-      color: var(--gold); font-weight: 500;
-      border: 1px solid var(--gold-dim); padding: .38rem 1rem;
-      margin-bottom: 2.2rem;
+      font-size: .8rem; letter-spacing: .28em; text-transform: uppercase;
+      color: var(--blue); font-weight: 500;
+      margin-bottom: 2rem; display: block;
     }
     .hero-name {
       font-family: var(--font-disp);
-      font-size: clamp(3.4rem, 7vw, 6.5rem);
+      font-size: clamp(3.8rem, 8vw, 7.2rem);
       font-weight: 600; line-height: 1.04;
-      color: var(--text); letter-spacing: -.01em;
-      margin-bottom: 1.6rem;
+      color: var(--text); letter-spacing: -.018em;
+      margin-bottom: 1.8rem;
     }
     .hero-sub {
-      font-size: 1.1rem; line-height: 1.65;
+      font-size: 1.25rem; line-height: 1.72;
       color: var(--muted); max-width: 500px;
-      margin-bottom: 3rem;
+      margin-bottom: 2.8rem;
     }
-    .hero-actions { display: flex; gap: 1.2rem; flex-wrap: wrap; }
-    .btn-ghost {
-      display: inline-block; text-decoration: none;
-      font-size: .78rem; letter-spacing: .15em; text-transform: uppercase;
-      font-weight: 500; color: var(--text);
-      border: 1px solid rgba(240,237,232,0.22);
-      padding: .8rem 2rem;
-      transition: border-color .3s, color .3s, background .3s;
-    }
-    .btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
-    .btn-ghost.gold { border-color: var(--gold); color: var(--gold); }
-    .btn-ghost.gold:hover { background: var(--gold); color: var(--bg); }
+    .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
 
-    /* network SVG */
-    #network-svg {
-      position: absolute; right: 0; top: 50%;
-      transform: translateY(-50%);
-      width: 46vw; max-width: 680px; height: 90vh;
-      z-index: 1; opacity: .7;
+    .btn {
+      display: inline-block; text-decoration: none;
+      font-size: .76rem; letter-spacing: .14em; text-transform: uppercase;
+      font-weight: 500; padding: .85rem 2rem;
+      transition: all .25s ease;
     }
+    .btn-outline {
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-outline:hover { border-color: var(--blue); color: var(--blue); }
+    .btn-solid {
+      background: var(--blue-dim);
+      border: 1px solid var(--blue);
+      color: var(--blue);
+    }
+    .btn-solid:hover { background: var(--blue); color: var(--bg); }
+
+    /* network */
+    #network-svg {
+      position: absolute; right: -2vw; top: 50%;
+      transform: translateY(-50%);
+      width: 48vw; max-width: 700px; height: 92vh;
+      z-index: 1; opacity: .55;
+      pointer-events: none;
+    }
+    [data-theme="light"] #network-svg { opacity: .3; }
 
     /* ── Marquee ── */
     #marquee {
       border-top: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
-      padding: 1.1rem 0; overflow: hidden;
-      white-space: nowrap; position: relative;
+      padding: 1rem 0; overflow: hidden;
+      white-space: nowrap;
     }
     .marquee-track {
-      display: inline-flex; align-items: center; gap: 0;
-      animation: marquee 38s linear infinite;
+      display: inline-flex; align-items: center;
+      animation: marquee 42s linear infinite;
     }
     .marquee-item {
-      font-size: .72rem; letter-spacing: .22em; text-transform: uppercase;
-      color: var(--gold); font-weight: 500; padding: 0 2.2rem;
+      font-size: .7rem; letter-spacing: .2em; text-transform: uppercase;
+      color: var(--muted); font-weight: 400; padding: 0 2rem;
     }
-    .marquee-sep { color: var(--muted); font-size: .65rem; }
+    .marquee-item strong { color: var(--blue); font-weight: 500; }
     @keyframes marquee {
-      0%   { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
     }
 
     /* ── About ── */
-    #about { padding: 9rem 0; }
-    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; margin-bottom: 5rem; }
+    #about { padding: 9rem 0 8rem; }
+    .about-grid {
+      display: grid; grid-template-columns: 5fr 7fr; gap: 6rem;
+      margin-bottom: 5rem; align-items: start;
+    }
     .about-pull {
       font-family: var(--font-disp); font-style: italic;
-      font-size: clamp(1.45rem, 2.4vw, 1.95rem);
-      line-height: 1.42; color: var(--text);
-      border-left: 2px solid var(--gold);
-      padding-left: 1.8rem; margin-top: 1.6rem;
+      font-size: clamp(1.4rem, 2.2vw, 1.85rem);
+      line-height: 1.45; color: var(--text);
+      padding-left: 1.6rem;
+      border-left: 2px solid var(--blue);
+      margin-top: 0;
     }
-    .about-body p { color: var(--muted); font-size: .97rem; margin-bottom: 1.2rem; line-height: 1.78; }
+    .about-body p {
+      color: var(--muted); font-size: 1.06rem;
+      margin-bottom: 1.3rem; line-height: 1.82;
+    }
     .about-body p:last-child { margin-bottom: 0; }
-    .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
-    .stat-block { border-top: 1px solid var(--border); padding-top: 1.4rem; }
+
+    .stats-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 2rem; }
+    .stat-block { border-top: 1px solid var(--border); padding-top: 1.5rem; }
     .stat-num {
-      font-family: var(--font-disp); font-size: 2.4rem;
-      color: var(--gold); font-weight: 600; line-height: 1; margin-bottom: .5rem;
+      font-family: var(--font-disp); font-size: 2.2rem;
+      color: var(--blue); font-weight: 600; line-height: 1;
+      margin-bottom: .5rem;
     }
-    .stat-label { font-size: .74rem; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+    .stat-label {
+      font-size: .76rem; letter-spacing: .14em;
+      text-transform: uppercase; color: var(--muted);
+    }
 
     /* ── Focus ── */
-    #focus { padding: 9rem 0; border-top: 1px solid var(--border); }
-    .focus-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: .5rem; }
+    #focus { padding: 8rem 0; border-top: 1px solid var(--border); }
+    .focus-grid {
+      display: grid; grid-template-columns: repeat(3,1fr);
+      gap: 1.2rem; margin-top: .5rem;
+    }
     .focus-card {
-      background: var(--navy); border: 1px solid rgba(26,26,46,0.9);
-      padding: 2.6rem 2.2rem;
-      transition: border-color .3s ease;
+      background: var(--subtle);
+      border: 1px solid var(--border);
+      padding: 2.8rem 2.2rem;
+      transition: border-color .3s;
       position: relative; overflow: hidden;
     }
-    .focus-card::before {
+    .focus-card::after {
       content: ''; position: absolute;
       left: 0; bottom: 0; width: 0; height: 1px;
-      background: var(--gold); transition: width .5s ease;
+      background: var(--blue); transition: width .5s ease;
     }
-    .focus-card:hover { border-color: var(--gold); }
-    .focus-card:hover::before { width: 100%; }
+    .focus-card:hover { border-color: var(--blue); }
+    .focus-card:hover::after { width: 100%; }
     .focus-icon { margin-bottom: 1.8rem; }
-    .focus-icon svg { width: 28px; height: 28px; stroke: var(--gold); fill: none; stroke-width: 1.4; }
+    .focus-icon svg { width: 26px; height: 26px; stroke: var(--blue); fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
     .focus-title {
-      font-family: var(--font-disp); font-size: 1.2rem;
-      font-weight: 600; color: var(--text); margin-bottom: .9rem;
+      font-family: var(--font-disp); font-size: 1.15rem;
+      font-weight: 600; color: var(--text); margin-bottom: .8rem; line-height: 1.3;
     }
-    .focus-desc { color: var(--muted); font-size: .92rem; line-height: 1.7; }
+    .focus-desc { color: var(--muted); font-size: .96rem; line-height: 1.75; }
 
     /* ── Career ── */
-    #career { padding: 9rem 0; border-top: 1px solid var(--border); }
-    .timeline { position: relative; margin-top: 1rem; padding-left: 0; }
+    #career { padding: 8rem 0; border-top: 1px solid var(--border); }
+    .timeline { position: relative; margin-top: 1rem; }
     .timeline-line {
-      position: absolute; left: 148px; top: 8px; bottom: 8px;
-      width: 1px; background: rgba(201,168,76,0.25);
+      position: absolute; left: 152px; top: 8px; bottom: 8px;
+      width: 1px; background: var(--border);
     }
-    .timeline-entry { display: grid; grid-template-columns: 148px auto; gap: 2.4rem; margin-bottom: 3.6rem; position: relative; }
+    .timeline-entry {
+      display: grid; grid-template-columns: 152px auto;
+      gap: 2.6rem; margin-bottom: 3.8rem; position: relative;
+    }
     .timeline-entry:last-child { margin-bottom: 0; }
     .timeline-date {
-      text-align: right; padding-right: 2.4rem; position: relative;
-      font-size: .76rem; letter-spacing: .1em; color: var(--muted);
-      line-height: 1.5; padding-top: .1rem;
+      text-align: right; padding-right: 2.6rem; position: relative;
+      font-size: .78rem; letter-spacing: .08em; color: var(--muted); line-height: 1.5;
     }
     .timeline-date::after {
       content: ''; position: absolute;
       right: -5px; top: 6px;
       width: 9px; height: 9px; border-radius: 50%;
-      background: var(--bg); border: 1.5px solid var(--gold);
+      background: var(--bg); border: 1.5px solid var(--blue);
     }
-    .timeline-body { padding-top: 0; }
     .timeline-company {
-      font-size: .72rem; letter-spacing: .18em; text-transform: uppercase;
-      color: var(--gold); margin-bottom: .45rem; font-weight: 500;
+      font-size: .7rem; letter-spacing: .2em; text-transform: uppercase;
+      color: var(--blue); margin-bottom: .4rem; font-weight: 500;
     }
     .timeline-role {
-      font-family: var(--font-disp); font-size: 1.1rem;
-      color: var(--text); font-weight: 600; margin-bottom: .55rem;
+      font-family: var(--font-disp); font-size: 1.12rem;
+      color: var(--text); font-weight: 600; margin-bottom: .6rem;
     }
-    .timeline-detail { color: var(--muted); font-size: .9rem; line-height: 1.7; }
+    .timeline-detail { color: var(--muted); font-size: 1rem; line-height: 1.8; }
 
     /* ── Highlights ── */
-    #highlights { padding: 6rem 0; background: var(--navy); }
-    .highlights-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; }
+    #highlights { padding: 6rem 0; background: var(--subtle); }
+    .highlights-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2.4rem; }
     .callout {
-      border-left: 2px solid var(--gold-dim);
-      padding: 2.4rem 2.4rem 2.4rem 2.8rem; position: relative;
+      border: 1px solid var(--border);
+      padding: 2.6rem;
+      position: relative;
+      transition: border-color .3s;
     }
+    .callout:hover { border-color: var(--blue); }
     .callout-mark {
-      font-family: var(--font-disp); font-size: 4rem; line-height: 1;
-      color: var(--gold); opacity: .18; position: absolute;
-      top: 1.2rem; left: 1.6rem; font-weight: 600;
+      font-size: .68rem; letter-spacing: .22em; text-transform: uppercase;
+      color: var(--blue); font-weight: 500; margin-bottom: 1rem;
+      display: block;
     }
     .callout-text {
-      font-family: var(--font-disp); font-style: italic;
-      font-size: 1.12rem; line-height: 1.6; color: var(--text);
-      margin-bottom: .9rem; position: relative; z-index: 1;
+      font-size: 1.02rem; line-height: 1.75;
+      color: var(--text); margin-bottom: 1rem;
     }
-    .callout-meta { font-size: .74rem; letter-spacing: .15em; text-transform: uppercase; color: var(--gold); }
+    .callout-meta {
+      font-size: .74rem; letter-spacing: .14em;
+      text-transform: uppercase; color: var(--muted);
+    }
 
     /* ── Education ── */
-    #education { padding: 9rem 0; border-top: 1px solid var(--border); }
+    #education { padding: 8rem 0; border-top: 1px solid var(--border); }
     .edu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin-bottom: 4rem; }
     .edu-card { border-top: 1px solid var(--border); padding-top: 1.6rem; }
     .edu-institution {
       font-family: var(--font-disp); font-size: 1.12rem;
       color: var(--text); font-weight: 600; margin-bottom: .5rem;
     }
-    .edu-degree { color: var(--muted); font-size: .94rem; margin-bottom: .35rem; }
-    .edu-years { font-size: .75rem; letter-spacing: .14em; color: var(--gold); text-transform: uppercase; }
+    .edu-degree { color: var(--muted); font-size: .98rem; margin-bottom: .4rem; line-height: 1.6; }
+    .edu-years { font-size: .74rem; letter-spacing: .14em; color: var(--blue); text-transform: uppercase; }
     .certs-label {
-      font-size: .72rem; letter-spacing: .22em; text-transform: uppercase;
+      font-size: .7rem; letter-spacing: .22em; text-transform: uppercase;
       color: var(--muted); margin-bottom: 1.2rem;
     }
-    .certs-list { list-style: none; display: flex; flex-wrap: wrap; gap: .7rem; }
+    .certs-list { list-style: none; display: flex; flex-wrap: wrap; gap: .6rem; }
     .certs-list li {
-      font-size: .8rem; color: var(--muted);
-      border: 1px solid var(--border); padding: .42rem 1rem;
-      letter-spacing: .08em;
+      font-size: .82rem; color: var(--muted);
+      border: 1px solid var(--border); padding: .44rem 1rem;
+      letter-spacing: .06em;
     }
 
     /* ── Contact ── */
     #contact { padding: 9rem 0; border-top: 1px solid var(--border); }
     .contact-heading {
       font-family: var(--font-disp);
-      font-size: clamp(2.8rem, 5vw, 4.8rem);
+      font-size: clamp(2.6rem, 4.8vw, 4.4rem);
       font-weight: 600; color: var(--text);
-      margin-bottom: 3rem; line-height: 1.1;
+      margin-bottom: 2.8rem; line-height: 1.1;
     }
     .contact-links { display: flex; flex-direction: column; gap: 1.4rem; }
     .contact-link {
-      display: inline-flex; align-items: center; gap: 1.1rem;
+      display: inline-flex; align-items: center; gap: 1rem;
       text-decoration: none;
-      font-size: .92rem; color: var(--muted);
-      letter-spacing: .06em;
-      transition: color .25s;
+      font-size: .98rem; color: var(--muted);
+      transition: color .2s;
     }
-    .contact-link:hover { color: var(--gold); }
-    .contact-link svg { width: 18px; height: 18px; fill: currentColor; flex-shrink: 0; }
+    .contact-link:hover { color: var(--blue); }
+    .contact-link svg { width: 17px; height: 17px; fill: currentColor; flex-shrink: 0; }
 
     /* ── Footer ── */
     footer {
       border-top: 1px solid var(--border);
-      padding: 2.2rem 4rem;
+      padding: 2rem 4rem;
       display: flex; align-items: center; justify-content: space-between;
     }
-    .footer-name { font-size: .8rem; letter-spacing: .14em; color: var(--muted); text-transform: uppercase; }
-    .footer-copy { font-size: .78rem; color: var(--muted); }
-
-    /* ── Theme toggle ── */
-    #theme-toggle {
-      background: none; border: 1px solid var(--border);
-      color: var(--muted); cursor: none;
-      width: 36px; height: 36px; border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      transition: border-color .25s, color .25s;
-      flex-shrink: 0;
-    }
-    #theme-toggle:hover { border-color: var(--gold); color: var(--gold); }
-    #theme-toggle svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.6; }
-    .icon-sun, .icon-moon { transition: opacity .25s; }
-    [data-theme="light"] .icon-moon { display: none; }
-    [data-theme="dark"]  .icon-sun  { display: none; }
-    .nav-right { display: flex; align-items: center; gap: 2rem; }
-
-    /* light mode: timeline dot needs page bg colour */
-    [data-theme="light"] .timeline-date::after { background: var(--bg); }
+    .footer-name { font-size: .78rem; letter-spacing: .12em; color: var(--muted); text-transform: uppercase; }
+    .footer-copy { font-size: .76rem; color: var(--muted); }
 
     /* ── Responsive ── */
     @media (max-width: 900px) {
       nav { padding: 1.2rem 2rem; }
       .nav-links { display: none; }
       .hamburger { display: flex; }
-      #hero { padding: 0 2rem; padding-top: 5rem; }
+      #hero { padding: 6rem 2rem 3rem; align-items: flex-start; padding-top: 9rem; }
       #network-svg { display: none; }
-      .hero-name { font-size: clamp(2.8rem, 12vw, 4.2rem); }
-      .about-grid { grid-template-columns: 1fr; gap: 2.4rem; }
+      .hero-name { font-size: clamp(2.6rem, 12vw, 4rem); }
+      .about-grid { grid-template-columns: 1fr; gap: 2.6rem; }
       .focus-grid { grid-template-columns: 1fr; }
       .highlights-grid { grid-template-columns: 1fr; }
       .edu-grid { grid-template-columns: 1fr; }
-      .stats-row { grid-template-columns: repeat(3,1fr); gap: 1.2rem; }
-      .container { padding: 0 2rem; }
+      .stats-row { grid-template-columns: repeat(3,1fr); gap: 1rem; }
+      .container { padding: 0 1.8rem; }
       #about, #focus, #career, #education, #contact { padding: 6rem 0; }
-      .timeline { padding-left: 0; }
-      .timeline-line { left: 100px; }
-      .timeline-entry { grid-template-columns: 100px auto; gap: 1.6rem; }
-      .timeline-date { padding-right: 1.6rem; font-size: .7rem; }
-      footer { padding: 2rem; flex-direction: column; gap: .6rem; text-align: center; }
+      .timeline-line { left: 90px; }
+      .timeline-entry { grid-template-columns: 90px auto; gap: 1.6rem; }
+      .timeline-date { padding-right: 1.6rem; }
+      footer { padding: 1.8rem 2rem; flex-direction: column; gap: .5rem; text-align: center; }
     }
 
     @media (max-width: 560px) {
-      .stats-row { grid-template-columns: 1fr; gap: 1.4rem; }
-      .hero-actions { flex-direction: column; gap: .9rem; }
+      .stats-row { grid-template-columns: 1fr; }
+      .hero-actions { flex-direction: column; gap: .8rem; }
       .timeline-line { display: none; }
-      .timeline-entry { grid-template-columns: 1fr; gap: .4rem; }
-      .timeline-date { text-align: left; padding-right: 0; font-size: .76rem; }
+      .timeline-entry { grid-template-columns: 1fr; gap: .35rem; }
+      .timeline-date { text-align: left; padding-right: 0; }
       .timeline-date::after { display: none; }
     }
   </style>
 </head>
 <body>
 
-<!-- Custom cursor -->
 <div id="cursor"></div>
 
 <!-- Nav -->
@@ -425,9 +482,7 @@
       <li><a href="#contact">Contact</a></li>
     </ul>
     <button id="theme-toggle" aria-label="Toggle theme">
-      <!-- Sun (light mode icon) -->
       <svg class="icon-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-      <!-- Moon (dark mode icon) -->
       <svg class="icon-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
     </button>
     <button class="hamburger" id="hamburger" aria-label="Menu">
@@ -438,120 +493,109 @@
 
 <!-- Mobile drawer -->
 <div class="mobile-drawer" id="drawer">
-  <a href="#about"    onclick="closeDrawer()">About</a>
-  <a href="#focus"    onclick="closeDrawer()">Focus</a>
-  <a href="#career"   onclick="closeDrawer()">Career</a>
-  <a href="#contact"  onclick="closeDrawer()">Contact</a>
+  <a href="#about"   onclick="closeDrawer()">About</a>
+  <a href="#focus"   onclick="closeDrawer()">Focus</a>
+  <a href="#career"  onclick="closeDrawer()">Career</a>
+  <a href="#contact" onclick="closeDrawer()">Contact</a>
 </div>
 
 <!-- Hero -->
 <section id="hero">
   <div class="hero-content">
     <span class="hero-eyebrow reveal">EY Partner &middot; London</span>
-    <h1 class="hero-name reveal" style="transition-delay:.12s">Amarjit<br>Singh</h1>
-    <p class="hero-sub reveal" style="transition-delay:.22s">Advising boards and governments on Digital Assets, AI &amp; Blockchain Governance.</p>
-    <div class="hero-actions reveal" style="transition-delay:.34s">
-      <a href="#focus" class="btn-ghost">View Focus Areas</a>
-      <a href="#contact" class="btn-ghost gold">Get in Touch</a>
+    <h1 class="hero-name reveal" style="transition-delay:.1s">Amarjit<br>Singh</h1>
+    <p class="hero-sub reveal" style="transition-delay:.2s">Advising boards, regulators and governments on Digital Assets, AI &amp; Blockchain Governance.</p>
+    <div class="hero-actions reveal" style="transition-delay:.32s">
+      <a href="#focus" class="btn btn-outline">Focus Areas</a>
+      <a href="#contact" class="btn btn-solid">Get in Touch</a>
     </div>
   </div>
 
-  <!-- Network SVG -->
   <svg id="network-svg" viewBox="0 0 600 700" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
     <defs>
       <style>
-        .node { fill: #c9a84c; }
-        .node-ring { fill: none; stroke: #c9a84c; stroke-width: 1; }
-        .edge { stroke: #c9a84c; stroke-width: .8; opacity: 0; }
-        @keyframes pulse {
-          0%,100% { r: 3.5; opacity: .9; }
-          50%      { r: 5;   opacity: .5; }
-        }
-        @keyframes ringPulse {
-          0%   { r: 6;  opacity: .6; }
-          100% { r: 18; opacity: 0;  }
-        }
-        @keyframes drawLine {
-          to { opacity: .22; }
-        }
-        .node { animation: pulse 3.5s ease-in-out infinite; }
-        .edge { animation: drawLine .8s ease forwards; }
-        #n1  { animation-delay: 0s; }
-        #n2  { animation-delay: .4s; }
-        #n3  { animation-delay: .8s; }
-        #n4  { animation-delay: 1.2s; }
-        #n5  { animation-delay: 1.5s; }
-        #n6  { animation-delay: .2s; }
-        #n7  { animation-delay: .9s; }
-        #n8  { animation-delay: 1.1s; }
-        #n9  { animation-delay: .6s; }
-        #n10 { animation-delay: 1.4s; }
-        #e1  { animation-delay: .6s; }
-        #e2  { animation-delay: .9s; }
-        #e3  { animation-delay: 1.2s; }
-        #e4  { animation-delay: 1.5s; }
-        #e5  { animation-delay: 1.8s; }
-        #e6  { animation-delay: 2.1s; }
-        #e7  { animation-delay: 2.4s; }
-        #e8  { animation-delay: 2.7s; }
-        #e9  { animation-delay: 3.0s; }
-        #e10 { animation-delay: 3.3s; }
-        #e11 { animation-delay: 3.6s; }
-        #e12 { animation-delay: 3.9s; }
+        .nd { fill: #5B9FE8; }
+        .eg { stroke: #5B9FE8; stroke-width: .9; opacity: 0; }
+        @keyframes npulse { 0%,100%{r:3.5;opacity:.85} 50%{r:5;opacity:.45} }
+        @keyframes dline  { to { opacity: .18; } }
+        .nd { animation: npulse 3.8s ease-in-out infinite; }
+        .eg { animation: dline .9s ease forwards; }
+        #n1{animation-delay:0s}#n2{animation-delay:.5s}#n3{animation-delay:.9s}
+        #n4{animation-delay:1.3s}#n5{animation-delay:1.6s}#n6{animation-delay:.3s}
+        #n7{animation-delay:1s}#n8{animation-delay:1.2s}#n9{animation-delay:.7s}#n10{animation-delay:1.5s}
+        #e1{animation-delay:.7s}#e2{animation-delay:1s}#e3{animation-delay:1.3s}
+        #e4{animation-delay:1.6s}#e5{animation-delay:1.9s}#e6{animation-delay:2.2s}
+        #e7{animation-delay:2.5s}#e8{animation-delay:2.8s}#e9{animation-delay:3.1s}
+        #e10{animation-delay:3.4s}#e11{animation-delay:3.7s}#e12{animation-delay:4s}
+        .ex1{animation-delay:4.3s}#e14{animation-delay:4.6s}
       </style>
     </defs>
-    <!-- Edges -->
-    <line id="e1"  class="edge" x1="110" y1="140" x2="300" y2="210"/>
-    <line id="e2"  class="edge" x1="300" y1="210" x2="480" y2="180"/>
-    <line id="e3"  class="edge" x1="300" y1="210" x2="350" y2="380"/>
-    <line id="e4"  class="edge" x1="110" y1="140" x2="200" y2="320"/>
-    <line id="e5"  class="edge" x1="480" y1="180" x2="520" y2="340"/>
-    <line id="e6"  class="edge" x1="350" y1="380" x2="520" y2="340"/>
-    <line id="e7"  class="edge" x1="200" y1="320" x2="350" y2="380"/>
-    <line id="e8"  class="edge" x1="200" y1="320" x2="160" y2="490"/>
-    <line id="e9"  class="edge" x1="350" y1="380" x2="400" y2="540"/>
-    <line id="e10" class="edge" x1="160" y1="490" x2="400" y2="540"/>
-    <line id="e11" class="edge" x1="520" y1="340" x2="460" y2="560"/>
-    <line id="e12" class="edge" x1="400" y1="540" x2="460" y2="560"/>
-    <!-- Nodes -->
-    <circle id="n1"  class="node" cx="110" cy="140" r="3.5"/>
-    <circle id="n2"  class="node" cx="300" cy="210" r="3.5"/>
-    <circle id="n3"  class="node" cx="480" cy="180" r="3.5"/>
-    <circle id="n4"  class="node" cx="200" cy="320" r="3.5"/>
-    <circle id="n5"  class="node" cx="350" cy="380" r="3.5"/>
-    <circle id="n6"  class="node" cx="520" cy="340" r="3.5"/>
-    <circle id="n7"  class="node" cx="160" cy="490" r="3.5"/>
-    <circle id="n8"  class="node" cx="400" cy="540" r="3.5"/>
-    <circle id="n9"  class="node" cx="460" cy="560" r="3.5"/>
-    <circle id="n10" class="node" cx="270" cy="80"  r="3.5"/>
-    <!-- Extra connecting edges from n10 -->
-    <line class="edge" x1="270" y1="80" x2="110" y2="140" style="animation-delay:4.2s"/>
-    <line class="edge" x1="270" y1="80" x2="480" y2="180" style="animation-delay:4.5s"/>
+    <line id="e1"  class="eg" x1="110" y1="140" x2="300" y2="210"/>
+    <line id="e2"  class="eg" x1="300" y1="210" x2="480" y2="180"/>
+    <line id="e3"  class="eg" x1="300" y1="210" x2="350" y2="380"/>
+    <line id="e4"  class="eg" x1="110" y1="140" x2="200" y2="320"/>
+    <line id="e5"  class="eg" x1="480" y1="180" x2="520" y2="340"/>
+    <line id="e6"  class="eg" x1="350" y1="380" x2="520" y2="340"/>
+    <line id="e7"  class="eg" x1="200" y1="320" x2="350" y2="380"/>
+    <line id="e8"  class="eg" x1="200" y1="320" x2="160" y2="490"/>
+    <line id="e9"  class="eg" x1="350" y1="380" x2="400" y2="540"/>
+    <line id="e10" class="eg" x1="160" y1="490" x2="400" y2="540"/>
+    <line id="e11" class="eg" x1="520" y1="340" x2="460" y2="560"/>
+    <line id="e12" class="eg" x1="400" y1="540" x2="460" y2="560"/>
+    <line class="eg ex1" x1="270" y1="80"  x2="110" y2="140"/>
+    <line id="e14" class="eg" x1="270" y1="80"  x2="480" y2="180"/>
+    <circle id="n1"  class="nd" cx="110" cy="140" r="3.5"/>
+    <circle id="n2"  class="nd" cx="300" cy="210" r="3.5"/>
+    <circle id="n3"  class="nd" cx="480" cy="180" r="3.5"/>
+    <circle id="n4"  class="nd" cx="200" cy="320" r="3.5"/>
+    <circle id="n5"  class="nd" cx="350" cy="380" r="3.5"/>
+    <circle id="n6"  class="nd" cx="520" cy="340" r="3.5"/>
+    <circle id="n7"  class="nd" cx="160" cy="490" r="3.5"/>
+    <circle id="n8"  class="nd" cx="400" cy="540" r="3.5"/>
+    <circle id="n9"  class="nd" cx="460" cy="560" r="3.5"/>
+    <circle id="n10" class="nd" cx="270" cy="80"  r="3.5"/>
   </svg>
 </section>
 
 <!-- Marquee -->
 <div id="marquee">
-  <div class="marquee-track" id="marqueeTrack">
-    <span class="marquee-item">Digital Assets</span><span class="marquee-sep">·</span>
-    <span class="marquee-item">Blockchain Governance</span><span class="marquee-sep">·</span>
-    <span class="marquee-item">AI Regulation</span><span class="marquee-sep">·</span>
-    <span class="marquee-item">Risk Frameworks</span><span class="marquee-sep">·</span>
-    <span class="marquee-item">Board Advisory</span><span class="marquee-sep">·</span>
-    <span class="marquee-item">Wealth &amp; Asset Management</span><span class="marquee-sep">·</span>
-    <span class="marquee-item">HM Treasury</span><span class="marquee-sep">·</span>
-    <span class="marquee-item">ICAEW</span><span class="marquee-sep">·</span>
-    <span class="marquee-item">EY Partner</span><span class="marquee-sep">·</span>
-    <!-- duplicate for seamless loop -->
-    <span class="marquee-item">Digital Assets</span><span class="marquee-sep">·</span>
-    <span class="marquee-item">Blockchain Governance</span><span class="marquee-sep">·</span>
-    <span class="marquee-item">AI Regulation</span><span class="marquee-sep">·</span>
-    <span class="marquee-item">Risk Frameworks</span><span class="marquee-sep">·</span>
-    <span class="marquee-item">Board Advisory</span><span class="marquee-sep">·</span>
-    <span class="marquee-item">Wealth &amp; Asset Management</span><span class="marquee-sep">·</span>
-    <span class="marquee-item">HM Treasury</span><span class="marquee-sep">·</span>
-    <span class="marquee-item">ICAEW</span><span class="marquee-sep">·</span>
-    <span class="marquee-item">EY Partner</span><span class="marquee-sep">·</span>
+  <div class="marquee-track">
+    <span class="marquee-item"><strong>Digital Assets</strong></span>
+    <span class="marquee-item">·</span>
+    <span class="marquee-item">Blockchain Governance</span>
+    <span class="marquee-item">·</span>
+    <span class="marquee-item"><strong>AI Regulation</strong></span>
+    <span class="marquee-item">·</span>
+    <span class="marquee-item">Risk Frameworks</span>
+    <span class="marquee-item">·</span>
+    <span class="marquee-item"><strong>Board Advisory</strong></span>
+    <span class="marquee-item">·</span>
+    <span class="marquee-item">Wealth &amp; Asset Management</span>
+    <span class="marquee-item">·</span>
+    <span class="marquee-item"><strong>HM Treasury</strong></span>
+    <span class="marquee-item">·</span>
+    <span class="marquee-item">ICAEW</span>
+    <span class="marquee-item">·</span>
+    <span class="marquee-item"><strong>EY Partner</strong></span>
+    <span class="marquee-item">·</span>
+    <span class="marquee-item">Digital Assets</span>
+    <span class="marquee-item">·</span>
+    <span class="marquee-item"><strong>Blockchain Governance</strong></span>
+    <span class="marquee-item">·</span>
+    <span class="marquee-item">AI Regulation</span>
+    <span class="marquee-item">·</span>
+    <span class="marquee-item"><strong>Risk Frameworks</strong></span>
+    <span class="marquee-item">·</span>
+    <span class="marquee-item">Board Advisory</span>
+    <span class="marquee-item">·</span>
+    <span class="marquee-item"><strong>Wealth &amp; Asset Management</strong></span>
+    <span class="marquee-item">·</span>
+    <span class="marquee-item">HM Treasury</span>
+    <span class="marquee-item">·</span>
+    <span class="marquee-item"><strong>ICAEW</strong></span>
+    <span class="marquee-item">·</span>
+    <span class="marquee-item">EY Partner</span>
+    <span class="marquee-item">·</span>
   </div>
 </div>
 
@@ -560,15 +604,15 @@
   <div class="container">
     <div class="about-grid reveal">
       <div>
-        <p class="section-label">/ About</p>
+        <p class="section-label">About</p>
         <blockquote class="about-pull">
           "Joining the dots across regulation, risk, technology and commercial strategy."
         </blockquote>
       </div>
       <div class="about-body">
-        <p>Amarjit Singh is a Partner at EY with over seventeen years of experience at the firm, leading the UK&amp;I Digital Assets practice and serving as EMEIA Blockchain Assurance Leader. He sits at the intersection of emerging technology, financial regulation and institutional governance — advising FTSE-listed boards, asset managers and government bodies on how to navigate rapidly evolving digital landscapes.</p>
-        <p>A Cambridge-trained technologist who crossed into financial services, Amarjit has spent his career translating complexity into clarity. He has advised on fund tokenisation, crypto asset custody frameworks, AI governance policies, and the regulatory treatment of distributed ledger technology in wholesale markets.</p>
-        <p>Beyond EY, he chairs ICAEW's Digital Assets SteerCo and serves as Audit &amp; Risk Committee Chair for NHS Charities Together — bringing the same rigour he applies in boardrooms to the governance of institutions that matter.</p>
+        <p>Amarjit Singh is a Partner at EY with over seventeen years at the firm, leading the UK&amp;I Digital Assets practice and serving as EMEIA Blockchain Assurance Leader. He sits at the intersection of emerging technology, financial regulation and institutional governance — advising FTSE-listed boards, asset managers and government bodies on navigating rapidly evolving digital landscapes.</p>
+        <p>A Cambridge-trained computer scientist who crossed into financial services, Amarjit has spent his career translating complexity into clarity. He has worked across fund tokenisation, crypto asset custody, AI governance, and the regulatory treatment of distributed ledger technology in wholesale markets.</p>
+        <p>Beyond EY, he chairs ICAEW's Digital Assets SteerCo and serves as Audit &amp; Risk Committee Chair for NHS Charities Together — bringing the same rigour he applies in boardrooms to institutions that matter beyond the bottom line.</p>
       </div>
     </div>
     <div class="stats-row">
@@ -576,11 +620,11 @@
         <div class="stat-num">17+</div>
         <div class="stat-label">Years at EY</div>
       </div>
-      <div class="stat-block reveal" style="transition-delay:.15s">
+      <div class="stat-block reveal" style="transition-delay:.14s">
         <div class="stat-num">Cambridge</div>
         <div class="stat-label">MA &middot; Magdalene College</div>
       </div>
-      <div class="stat-block reveal" style="transition-delay:.3s">
+      <div class="stat-block reveal" style="transition-delay:.28s">
         <div class="stat-num">6,800+</div>
         <div class="stat-label">LinkedIn Followers</div>
       </div>
@@ -588,46 +632,32 @@
   </div>
 </section>
 
-<!-- Focus Areas -->
+<!-- Focus -->
 <section id="focus">
   <div class="container">
-    <p class="section-label reveal">/ Focus</p>
+    <p class="section-label reveal">Focus</p>
     <div class="focus-grid">
-
       <div class="focus-card reveal">
         <div class="focus-icon">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/>
-            <path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/>
-          </svg>
+          <svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
         </div>
         <h3 class="focus-title">Digital Assets &amp; Blockchain</h3>
         <p class="focus-desc">Advising institutions on crypto asset strategy, tokenisation of funds and securities, DLT infrastructure, and regulatory compliance across UK, EU and EMEIA jurisdictions.</p>
       </div>
-
-      <div class="focus-card reveal" style="transition-delay:.14s">
+      <div class="focus-card reveal" style="transition-delay:.12s">
         <div class="focus-icon">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-          </svg>
+          <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
         </div>
         <h3 class="focus-title">Risk, Regulation &amp; Governance</h3>
-        <p class="focus-desc">Designing risk frameworks and governance structures for digital asset markets, AI deployment and emerging financial products — bridging technical realities with regulatory expectations.</p>
+        <p class="focus-desc">Designing risk and governance structures for digital asset markets, AI deployment and emerging financial products — bridging technical realities with regulatory expectations.</p>
       </div>
-
-      <div class="focus-card reveal" style="transition-delay:.28s">
+      <div class="focus-card reveal" style="transition-delay:.24s">
         <div class="focus-icon">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <rect x="3"  y="3"  width="7" height="7"/>
-            <rect x="14" y="3"  width="7" height="7"/>
-            <rect x="14" y="14" width="7" height="7"/>
-            <rect x="3"  y="14" width="7" height="7"/>
-          </svg>
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
         </div>
         <h3 class="focus-title">Board &amp; C-Suite Advisory</h3>
-        <p class="focus-desc">Providing independent strategic counsel to audit committees, boards and government taskforces — translating technical complexity into actionable decisions at executive level.</p>
+        <p class="focus-desc">Providing strategic counsel to audit committees, boards and government taskforces — translating technical complexity into clear, decisive guidance at executive level.</p>
       </div>
-
     </div>
   </div>
 </section>
@@ -635,55 +665,54 @@
 <!-- Career -->
 <section id="career">
   <div class="container">
-    <p class="section-label reveal">/ Career</p>
+    <p class="section-label reveal">Career</p>
     <div class="timeline">
       <div class="timeline-line"></div>
 
       <div class="timeline-entry reveal">
         <div class="timeline-date">Oct 2008<br>– Present</div>
         <div class="timeline-body">
-          <p class="timeline-company">Ernst &amp; Young (EY)</p>
+          <p class="timeline-company">Ernst &amp; Young</p>
           <p class="timeline-role">Partner</p>
-          <p class="timeline-detail">UK&amp;I Digital Assets Leader · EMEIA Blockchain Assurance Leader · EY CASS Leader. Leads EY's institutional digital assets assurance and advisory practice, working with exchanges, custodians, asset managers and regulators across the UK and Europe.</p>
+          <p class="timeline-detail">UK&amp;I Digital Assets Leader · EMEIA Blockchain Assurance Leader · EY CASS Leader. Leads EY's institutional digital assets assurance and advisory practice across exchanges, custodians, asset managers and regulators in the UK and Europe.</p>
         </div>
       </div>
 
-      <div class="timeline-entry reveal" style="transition-delay:.1s">
+      <div class="timeline-entry reveal" style="transition-delay:.08s">
         <div class="timeline-date">Jan 2017<br>– Present</div>
         <div class="timeline-body">
           <p class="timeline-company">ICAEW</p>
           <p class="timeline-role">Chair, Digital Assets SteerCo</p>
-          <p class="timeline-detail">Chairs the Institute of Chartered Accountants in England and Wales Digital Assets Steering Committee, shaping professional standards and guidance for accountants engaging with crypto assets and tokenised instruments.</p>
+          <p class="timeline-detail">Shapes professional standards and guidance for accountants engaging with crypto assets and tokenised instruments across the Institute of Chartered Accountants in England and Wales.</p>
         </div>
       </div>
 
-      <div class="timeline-entry reveal" style="transition-delay:.2s">
+      <div class="timeline-entry reveal" style="transition-delay:.16s">
         <div class="timeline-date">Sep 2021<br>– Present</div>
         <div class="timeline-body">
           <p class="timeline-company">NHS Charities Together</p>
           <p class="timeline-role">Audit &amp; Risk Committee Chair · Independent Trustee</p>
-          <p class="timeline-detail">Provides independent governance oversight for one of the UK's leading health charities, chairing the Audit &amp; Risk Committee and advising the Board of Trustees on financial control and organisational risk.</p>
+          <p class="timeline-detail">Provides independent governance oversight for one of the UK's leading health charities, chairing the Audit &amp; Risk Committee and advising the Board of Trustees on financial control and risk.</p>
         </div>
       </div>
 
-      <div class="timeline-entry reveal" style="transition-delay:.3s">
+      <div class="timeline-entry reveal" style="transition-delay:.24s">
         <div class="timeline-date">Dec 2014<br>– Mar 2020</div>
         <div class="timeline-body">
           <p class="timeline-company">Winnicott Foundation</p>
           <p class="timeline-role">Treasurer</p>
-          <p class="timeline-detail">Served as Treasurer and trustee of the Winnicott Foundation, overseeing financial stewardship and governance for the charitable trust supporting child psychotherapy research and training.</p>
+          <p class="timeline-detail">Oversaw financial stewardship for the charitable trust supporting the premature baby unit at St Mary's and Queen Charlotte Hospitals — an institution close to his heart.</p>
         </div>
       </div>
 
-      <div class="timeline-entry reveal" style="transition-delay:.4s">
+      <div class="timeline-entry reveal" style="transition-delay:.32s">
         <div class="timeline-date">2004<br>– 2008</div>
         <div class="timeline-body">
           <p class="timeline-company">JPMorgan Asset Management</p>
           <p class="timeline-role">Vice President</p>
-          <p class="timeline-detail">Held a Vice President role within JPMorgan's asset management division, building deep expertise in fund operations, risk management and institutional investment processes before transitioning to professional services.</p>
+          <p class="timeline-detail">Built expertise in fund operations, risk management and institutional investment processes before transitioning into professional services.</p>
         </div>
       </div>
-
     </div>
   </div>
 </section>
@@ -693,14 +722,14 @@
   <div class="container">
     <div class="highlights-grid">
       <div class="callout reveal">
-        <span class="callout-mark">&ldquo;</span>
-        <p class="callout-text">Co-led HM Treasury's Asset Management Taskforce working group on fund tokenisation — shaping the UK's regulatory and commercial framework for on-chain investment vehicles.</p>
-        <span class="callout-meta">HM Treasury &middot; Asset Management Taskforce</span>
+        <span class="callout-mark">HM Treasury &middot; Asset Management Taskforce</span>
+        <p class="callout-text">Co-led the working group on fund tokenisation — shaping the UK's regulatory and commercial framework for on-chain investment vehicles.</p>
+        <span class="callout-meta">Fund Tokenisation · Policy · Regulatory Framework</span>
       </div>
-      <div class="callout reveal" style="transition-delay:.18s">
-        <span class="callout-mark">&ldquo;</span>
-        <p class="callout-text">Featured on the CryptoReg Insights podcast discussing institutional adoption of digital assets — addressing custody, AML, governance and the evolving role of the Big Four in crypto markets.</p>
-        <span class="callout-meta">CryptoReg Insights &middot; Podcast</span>
+      <div class="callout reveal" style="transition-delay:.16s">
+        <span class="callout-mark">CryptoReg Insights &middot; Podcast</span>
+        <p class="callout-text">Featured discussing institutional adoption of digital assets — custody, AML, governance and the evolving role of the Big Four in crypto markets.</p>
+        <span class="callout-meta">Institutional Crypto · Digital Assets · Governance</span>
       </div>
     </div>
   </div>
@@ -709,7 +738,7 @@
 <!-- Education -->
 <section id="education">
   <div class="container">
-    <p class="section-label reveal">/ Education</p>
+    <p class="section-label reveal">Education</p>
     <div class="edu-grid reveal">
       <div class="edu-card">
         <h3 class="edu-institution">University of Cambridge</h3>
@@ -723,12 +752,12 @@
       </div>
     </div>
     <p class="certs-label reveal">Certifications &amp; Affiliations</p>
-    <ul class="certs-list reveal" style="transition-delay:.12s">
+    <ul class="certs-list reveal" style="transition-delay:.1s">
       <li>ACA &mdash; ICAEW Chartered Accountant</li>
-      <li>EY Digital Assets Practice Lead</li>
       <li>EMEIA Blockchain Assurance Leader</li>
-      <li>FRC Registered Auditor</li>
       <li>ICAEW Digital Assets SteerCo Chair</li>
+      <li>EY Sikh Network Chair</li>
+      <li>FRC Registered Auditor</li>
     </ul>
   </div>
 </section>
@@ -737,29 +766,19 @@
 <section id="contact">
   <div class="container">
     <h2 class="contact-heading reveal">Let's connect.</h2>
-    <div class="contact-links reveal" style="transition-delay:.14s">
+    <div class="contact-links reveal" style="transition-delay:.12s">
       <a href="https://linkedin.com/in/amarjit-singh-jeet" target="_blank" rel="noopener" class="contact-link">
-        <!-- LinkedIn icon -->
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/>
-          <circle cx="4" cy="4" r="2"/>
-        </svg>
+        <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
         linkedin.com/in/amarjit-singh-jeet
       </a>
       <a href="https://ey.com/en_gl/people/amarjit-singh" target="_blank" rel="noopener" class="contact-link">
-        <!-- EY-style icon: simple "EY" text as SVG -->
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.5"/>
-          <path d="M7 9h4M7 12h3M7 15h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-          <path d="M14 9l2.5 3.5L19 9M16.5 12.5V15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M7 9h4M7 12h3M7 15h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M14 9l2.5 3.5L19 9M16.5 12.5V15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         ey.com/en_gl/people/amarjit-singh
       </a>
     </div>
   </div>
 </section>
 
-<!-- Footer -->
 <footer>
   <span class="footer-name">Amarjit Singh &middot; EY Partner &middot; London</span>
   <span class="footer-copy">&copy; 2025</span>
@@ -768,49 +787,108 @@
 <script>
   /* ── Cursor ── */
   const cursor = document.getElementById('cursor');
-  let mx = -100, my = -100;
   document.addEventListener('mousemove', e => {
-    mx = e.clientX; my = e.clientY;
-    cursor.style.left = mx + 'px';
-    cursor.style.top  = my + 'px';
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top  = e.clientY + 'px';
   });
-  document.querySelectorAll('a, button, .focus-card').forEach(el => {
+  document.querySelectorAll('a, button, .focus-card, .callout').forEach(el => {
     el.addEventListener('mouseenter', () => cursor.classList.add('expand'));
     el.addEventListener('mouseleave', () => cursor.classList.remove('expand'));
   });
 
+  /* ── Smooth momentum scroll ── */
+  (function() {
+    let current = 0, target = 0, ease = 0.085;
+    let ticking = false;
+
+    function lerp(a, b, t) { return a + (b - a) * t; }
+
+    function update() {
+      current = lerp(current, target, ease);
+      if (Math.abs(target - current) < 0.5) current = target;
+
+      document.getElementById('scroll-content').style.transform =
+        'translateY(' + (-current) + 'px)';
+
+      ticking = false;
+      if (Math.abs(target - current) > 0.5) requestAnimationFrame(update);
+    }
+
+    function onScroll() {
+      target = window.scrollY;
+      if (!ticking) { ticking = true; requestAnimationFrame(update); }
+    }
+
+    /* Only on desktop — mobile native scroll is fine */
+    if (window.matchMedia('(pointer: fine)').matches) {
+      const content = document.getElementById('scroll-content');
+      if (!content) return;
+
+      /* Set body height so native scrollbar works */
+      function setHeight() {
+        document.body.style.height = content.scrollHeight + 'px';
+        content.style.position = 'fixed';
+        content.style.top = '0';
+        content.style.left = '0';
+        content.style.right = '0';
+        content.style.willChange = 'transform';
+      }
+      setHeight();
+      window.addEventListener('resize', setHeight);
+      window.addEventListener('scroll', onScroll, { passive: true });
+    }
+  })();
+
   /* ── Nav on scroll ── */
   const nav = document.getElementById('nav');
   window.addEventListener('scroll', () => {
-    nav.classList.toggle('scrolled', window.scrollY > 40);
+    nav.classList.toggle('scrolled', window.scrollY > 50);
   }, { passive: true });
 
-  /* ── Active nav link on scroll ── */
+  /* ── Active nav on scroll ── */
   const sections = document.querySelectorAll('section[id]');
   const navLinks  = document.querySelectorAll('.nav-links a');
-  const observer = new IntersectionObserver(entries => {
+  const secObserver = new IntersectionObserver(entries => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
-        navLinks.forEach(a => {
-          a.classList.toggle('active', a.getAttribute('href') === '#' + entry.target.id);
-        });
+        navLinks.forEach(a =>
+          a.classList.toggle('active', a.getAttribute('href') === '#' + entry.target.id)
+        );
       }
     });
-  }, { threshold: 0.35 });
-  sections.forEach(s => observer.observe(s));
+  }, { threshold: 0.3 });
+  sections.forEach(s => secObserver.observe(s));
 
   /* ── Reveal on scroll ── */
-  const revealObserver = new IntersectionObserver(entries => {
+  const revealObs = new IntersectionObserver(entries => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.classList.add('visible');
-        revealObserver.unobserve(entry.target);
+        revealObs.unobserve(entry.target);
       }
     });
-  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+  }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
 
-  /* ── Hamburger / drawer ── */
+  /* ── Hero reveal immediately ── */
+  window.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => {
+      document.querySelectorAll('#hero .reveal').forEach(el => el.classList.add('visible'));
+    }, 100);
+  });
+
+  /* ── Theme toggle ── */
+  const html = document.documentElement;
+  const toggleBtn = document.getElementById('theme-toggle');
+  const saved = localStorage.getItem('as-theme') || 'light';
+  html.dataset.theme = saved;
+  toggleBtn.addEventListener('click', () => {
+    const next = html.dataset.theme === 'dark' ? 'light' : 'dark';
+    html.dataset.theme = next;
+    localStorage.setItem('as-theme', next);
+  });
+
+  /* ── Hamburger ── */
   const hamburger = document.getElementById('hamburger');
   const drawer    = document.getElementById('drawer');
   hamburger.addEventListener('click', () => {
@@ -822,22 +900,15 @@
     drawer.classList.remove('open');
   }
 
-  /* ── Theme toggle ── */
-  const html = document.documentElement;
-  const toggleBtn = document.getElementById('theme-toggle');
-  const saved = localStorage.getItem('theme') || 'dark';
-  html.dataset.theme = saved;
-  toggleBtn.addEventListener('click', () => {
-    const next = html.dataset.theme === 'dark' ? 'light' : 'dark';
-    html.dataset.theme = next;
-    localStorage.setItem('theme', next);
-  });
-
-  /* ── Trigger hero reveals immediately ── */
-  window.addEventListener('DOMContentLoaded', () => {
-    setTimeout(() => {
-      document.querySelectorAll('#hero .reveal').forEach(el => el.classList.add('visible'));
-    }, 120);
+  /* ── Anchor smooth scroll (works with momentum scroll) ── */
+  document.querySelectorAll('a[href^="#"]').forEach(link => {
+    link.addEventListener('click', e => {
+      const target = document.querySelector(link.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
   });
 </script>
 </body>
